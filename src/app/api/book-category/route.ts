@@ -9,6 +9,7 @@ export async function GET () {
         return NextResponse.json(categories)
     } catch (e) {
         if (e instanceof Error) {
+            console.log(e.message)
             return NextResponse.json(e.message, {status: 500});
         }
         return NextResponse.json("An unexpected error occurred", {status: 500});

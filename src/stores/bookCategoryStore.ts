@@ -1,26 +1,27 @@
 import {create} from "zustand/react";
-import {BookCategoryState} from "@/interface/BookCategory";
+import {BookCategoryState, PostCategory} from "@/interface/BookCategory";
+import {AxiosInstance} from "@/utils/axios";
 
+type SetState = (state: Partial<BookCategoryState>) => void;
+const handleError = (set: SetState, error: unknown) => {
+    const message = error instanceof Error ? error.message : "An unexpected error occurred";
+    set({ error: message });
+};
 export const bookCategoryStore = create<BookCategoryState>((set) => ({
     categories: [],
     category: {id: "", name: ""},
     loading: false,
+    loadingCrud: false,
     error: "",
     status: 0,
     id: "",
     getBookCategory: async () => {
         try {
             set({loading:true})
-            await fetch(`/api/book-category`)
-                .then(res => res.json())
-                .then(data => set({categories: data}))
-                .catch(e => set({error: e.message}))
+            const res =  await AxiosInstance.get(`/api/book-category`)
+            set({categories: res.data})
         } catch (e) {
-            if (e instanceof Error) {
-                set({error: e.message})
-            } else {
-                set({error: "An unexpected error occurred"})
-            }
+            handleError(set, e)
         }
         finally {
             set({loading:false})
@@ -28,88 +29,51 @@ export const bookCategoryStore = create<BookCategoryState>((set) => ({
     },
     getBookCategoryById: async (id:string) => {
         try {
-            set({loading:true})
-            await fetch(`/api/book-category/${id}`)
-                .then(res => res.json())
-                .then(data => set({category: data}))
-                .catch(e => set({error: e.message}))
+            set({loadingCrud:true})
+            const res = await AxiosInstance.get(`/api/book-category/${id}`)
+            set({category: res.data})
         } catch (e) {
-            if (e instanceof Error) {
-                set({error: e.message})
-            } else {
-                set({error: "An unexpected error occurred"})
-            }
+            handleError(set, e)
         } finally {
-            set({loading:false})
+            set({loadingCrud:false})
         }
     },
-    createBookCategory: async (name:string) => {
+    createBookCategory: async (data:PostCategory) => {
         try {
-            set({loading:true})
-            await fetch(`/api/book-category`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({name})
+            set({loadingCrud:true})
+            await AxiosInstance.post(`/api/book-category`, {
+                ...data
             })
-                .then(res => res.json())
-                .then(data => set({category: data}))
-                .catch(e => set({error: e.message}))
         } catch (e) {
-            if (e instanceof Error) {
-                set({error: e.message})
-            } else {
-                set({error: "An unexpected error occurred"})
-            }
+            handleError(set, e)
         } finally {
-            set({loading:false})
+            set({loadingCrud:false})
         }
     },
-    updateBookCategory: async (id:string, name:string) => {
+    updateBookCategory: async (id:string, data:PostCategory) => {
         try {
-            set({loading:true})
-            await fetch(`/api/book-category`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ id, name })
+            set({loadingCrud:true})
+            await AxiosInstance.patch(`/api/book-category`, {
+                ...data
             })
-                .then(res => res.json())
-                .then(data => set({category: data}))
-                .catch(e => set({error: e.message}))
         } catch (e) {
-            if (e instanceof Error) {
-                set({error: e.message})
-            } else {
-                set({error: "An unexpected error occurred"})
-            }
+            handleError(set, e)
         } finally {
-            set({loading:false})
+            set({loadingCrud:false})
         }
     },
     deleteBookCategory: async (id:string) => {
         try {
-            set({loading:true})
-            await fetch(`/api/book-category`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({id})
+            set({loadingCrud:true})
+            await AxiosInstance.delete(`/api/book-category`, {
+                data:{
+                    id:id
+                }
             })
-                .then(res => res.json())
-                .then(data => set({category: data}))
-                .catch(e => set({error: e.message}))
         } catch (e) {
-            if (e instanceof Error) {
-                set({error: e.message})
-            } else {
-                set({error: "An unexpected error occurred"})
-            }
+            handleError(set, e)
         } finally {
-            set({loading:false})
+            set({loadingCrud:false})
         }
     }
 }))

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { Urbanist } from "next/font/google";
 import "./globals.css";
 
@@ -18,11 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
+    <body
         className={`${urbanist.className} antialiased min-h-screen h-full`}
-      >
-        {children}
-      </body>
+    >
+    <time dateTime="2016-10-25" suppressHydrationWarning/>
+    {children}
+    </body>
     </html>
   );
 }
