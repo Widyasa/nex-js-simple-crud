@@ -1,8 +1,19 @@
 import prisma from "@/lib/db";
+import {createPaginator} from "prisma-pagination";
+import {BookCategory} from "@/interface/BookCategory";
+import {Prisma} from "@prisma/client";
 
-export const getCategories = async () => {
-    return prisma.bookCategories.findMany();
+export const getCategories = async (request: { search: string | null; page: string }) => {
+    const paginate = createPaginator({ perPage: 10 });
+
+    const whereCondition = request.search ? { name: request.search } : {};
+    return await paginate<BookCategory, Prisma.BookCategoriesFindManyArgs>(
+        prisma.bookCategories,
+        {where: whereCondition},
+        {page: request.page}
+    );
 };
+
 
 export const getCategoryById = async (id:string) => {
     return prisma.bookCategories.findUnique({

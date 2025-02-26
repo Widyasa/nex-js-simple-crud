@@ -13,12 +13,15 @@ export interface BookCategory {
 export interface BookCategoryState {
     categories: BookCategory[]
     category: BookCategory
+    search: string
+    page: number
+    totalPage: number
     loading: boolean
     loadingCrud: boolean
     error: string
     status: number
     id: string
-    getBookCategory: () => void
+    getBookCategory: (search?:string, page?:number) => void
     getBookCategoryById: (id: string) => void
     createBookCategory: (data:PostCategory) => void
     updateBookCategory: (id: string, data:PostCategory) => void

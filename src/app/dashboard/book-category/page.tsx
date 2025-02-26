@@ -1,5 +1,6 @@
 import Head from "next/head";
 import BookCategoryTable from "@/components/dashboard/tables/bookCategoryTable";
+import Searchbar from "@/components/dashboard/searchbar";
 
 export default function BookCategory(){
 

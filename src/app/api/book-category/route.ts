@@ -1,11 +1,13 @@
 import {createCategory, deleteCategory, getCategories, updateCategory} from "@/services/bookCategory";
 import {PostCategory} from "@/interface/BookCategory";
-import {NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server";
 
-
-export async function GET () {
+export async function GET (req:NextRequest) {
     try {
-        const categories = await getCategories()
+        const {searchParams} = req.nextUrl
+        const search = searchParams.get('search')
+        const page = searchParams.get('page')!
+        const categories = await getCategories({search, page})
         return NextResponse.json(categories)
     } catch (e) {
         if (e instanceof Error) {
