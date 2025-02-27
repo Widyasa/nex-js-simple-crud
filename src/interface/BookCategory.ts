@@ -6,7 +6,7 @@ export interface PostCategory {
 }
 
 export interface BookCategory {
-    id: string
+    id?: string
     name: string
 }
 
@@ -15,15 +15,18 @@ export interface BookCategoryState {
     category: BookCategory
     search: string
     page: number
-    totalPage: number
+    totalData: number
     loading: boolean
     loadingCrud: boolean
+    loadingDetail: boolean
     error: string
     status: number
     id: string
+    message:string
+    changeStatus: (status: number) => void
     getBookCategory: (search?:string, page?:number) => void
     getBookCategoryById: (id: string) => void
-    createBookCategory: (data:PostCategory) => void
-    updateBookCategory: (id: string, data:PostCategory) => void
+    createBookCategory: (data:BookCategory) => void
+    updateBookCategory: (id: string, data:BookCategory) => void
     deleteBookCategory: (id: string) => void
 }

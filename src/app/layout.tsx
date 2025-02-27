@@ -1,5 +1,6 @@
 import { Urbanist } from "next/font/google";
 import "./globals.css";
+import {Toaster} from "@/components/ui/sonner";
 
 const urbanist = Urbanist({
   subsets: ["latin"],
@@ -22,6 +23,7 @@ export default function RootLayout({
     >
     <time dateTime="2016-10-25" suppressHydrationWarning/>
     {children}
+    <Toaster position={'top-right'}/>
     </body>
     </html>
   );
